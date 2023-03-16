@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v2
     
       - name: Update SHA
-        run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/app/_meta
+        run: echo $GITHUB_SHA > $GITHUB_WORKSPACE/_meta
       
       - name: Build image
         run: docker build -t registry.digitalocean.com/belasartesaula/digital-ocean-deploy:$(echo $GITHUB_SHA | head -c7) .
@@ -32,13 +32,13 @@ jobs:
         run: docker push registry.digitalocean.com/belasartesaula/digital-ocean-deploy:$(echo $GITHUB_SHA | head -c7)
 
       - name: Update deploy file
-        run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|registry.digitalocean.com/belasartesaula/digital-ocean-deploy:'${TAG}'|' $GITHUB_WORKSPACE/config/deployment.yml
+        run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|registry.digitalocean.com/belasartesaula/digital-ocean-deploy:'${TAG}'|' $GITHUB_WORKSPACE/deployment.yml
 
       - name: save config cluster
         run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 k8s-1-25-4-do-0-ams3-1678884736333
 
       - name: Deploy
-        run: kubectl apply -f $GITHUB_WORKSPACE/config/deployment.yml
+        run: kubectl apply -f $GITHUB_WORKSPACE/deployment.yml
       
       - name: Verify deploy
         run: kubectl rollout status deployment/digital-ocean-deploy
