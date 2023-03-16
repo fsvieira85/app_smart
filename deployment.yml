@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: belasartesaula
-        image: registry.digitalocean.com/belasartesaula/digital-ocean-deploy:latest
+        image: registry.digitalocean.com/belasartesaula/digital-ocean-deploy
         securityContext:
           privileged: true
         ports:
